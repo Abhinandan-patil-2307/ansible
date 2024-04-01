@@ -1,0 +1,27 @@
+- name: copy tempalte of file
+  hosts: myserver
+  become: true
+  vars:
+    nginx_port: 90
+    nginx_path: "/usr/share/nginx/website"
+  tasks:
+    - name: website creation
+      yum:
+	name: nginx
+	state: present
+      service:
+	name: nginx
+	state: started
+    - name: copying file
+      copy:
+        src: ./index.html
+        dest: /usr/share/nginx/website/index.html
+    - name: copy with variable
+      template:
+	src: ./myconfig.conf
+	dest: /etc/nginx/nginx.conf
+        notify: reload nginx
+  handler:
+    - name: reload nginx
+      service:
+        name: nginx    

@@ -1,0 +1,9 @@
+- name: install any new
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: installing apache
+      yum:
+	name: httpd
+	state: started

@@ -1,0 +1,32 @@
+# changing in nginx.conf file with ansible
+- name: copy template and file
+  hosts: myserver
+  become: true
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: website creation
+      yum:
+         name: nginx
+         state: present
+      service:
+         name: nginx
+         state: started
+    - name: copying files
+      copy:
+         src: ./index.html
+         dest: /usr/share/nginx/html/website/index.html
+    - name: copy with variable
+      template:
+         src: ./myconfig.conf
+         dest: /etc/nginx/nginx.conf
+         notify: relaod nginx
+  handlers:
+    - name: relaod nginx
+      service:
+         name: nginx
+         state: reloaded
+   - name: debugging password
+     debug:
+         msg:"{{ my_password  }}"  
+  
